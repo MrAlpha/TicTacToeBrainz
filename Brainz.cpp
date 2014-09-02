@@ -16,20 +16,10 @@ char brainz(char mat[3][3]){
         human='X';
 
     turns=checkTurns(mat);
-    if (turns==1&&player=='X'){ //if computer has first move, claim right top corner, as a corner opening move has
-        return 2;               //the biggest potential for a wrong move by the opponent.
-    }
+    if(turns==1)
+        return firstTurn(mat, player, human);
 
-    if(turns==1&&player=='O'){          //if computer has second move...
-        if(checkCorner(mat,human)>0){     //...claim middle square if human has claimed a corner field
-            return 4;
-        }
-        else if(checkCenter(mat,human)>0){ //...claim corner if human has claimed the middle field
-            return 6;
-        }
-        else
-            return 4;                   //...claim middle square if human has opened with a side edge square
-    }                                   //this two lines of code could be included to the cases above.
+
 
     nextMove=checkWin(mat, player);
     if(nextMove>0)
@@ -91,6 +81,38 @@ char checkTurns(char mat [3][3]){
         return o;
 }
 
+//firstTurn returns the opening move or the move responding to a human opening move
+char firstTurn(char mat [3][3], char player, char human){
+
+    if (player=='X'){           //if computer has first move, claim right top corner, as a corner opening move has
+        return 2;               //the biggest potential for a wrong move by the opponent.
+    }
+
+    if(player=='O'){                      //if computer has second move...
+        if(checkCorner(mat,human)>0){     //...claim middle square if human has claimed a corner field
+            return 4;
+        }
+        else if(checkCenter(mat,human)>0){ //...claim corner if human has claimed the middle field
+            return 6;
+        }
+        else
+            return 4;                   //...claim middle square if human has opened with a side edge square
+    }                                   //this two lines of code could be included to the cases above.
+
+}
+
+//secondTurn returns the move of the computer in the second turn
+char secondTurn(char mat [3][3], char player, char human){
+    if (player=='X'&&checkCenter(mat, human)>0){           //if computer is X and human played center in first turn
+        return 6;                                          //claim opposite corner
+    }
+    else{
+
+    }
+
+    if(player=='O')
+}
+
 //checkWin returns the ID of the box the computer player needs to claim to win
 char checkWin(char mat [3][3], char checkFor){
     return checkTwoInRow_all(mat, checkFor);
@@ -124,6 +146,10 @@ char checkCenter(char mat [3][3], char checkFor){
         return 4;
     else
         return -1;
+}
+
+char checkFieldClaimed(char mat[3][3], char field){
+
 }
 
 //checkTwoInRow Returns the adjacent empty field of two equal fields in a row or a column.
