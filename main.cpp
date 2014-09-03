@@ -7,16 +7,16 @@ using namespace std;
 
 int main()
 {
-//    char check=-1;
-//    char mat [3][3]={{'-','-','-'},
-//                     {'-','-','-'},
-//                     {'-','-','-'}};
+    char check=-1;
+    char mat [3][3]={{'-','p','-'},
+                     {'-','-','-'},
+                     {'-','-','-'}};
 //    check=brainz(mat);
 //    cout<<(int)check<<endl;
-testFirstMove();
+ check=checkFieldIsClaimed(mat,1);
     //check=checkTwoInRow_all(mat, 'O');
     //cout << "Hello world!" << endl;
-    //cout << (int)check<<endl;
+    cout << (int)check<<endl;
 
     return 0;
 }

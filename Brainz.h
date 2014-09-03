@@ -13,6 +13,7 @@ char checkWin(char mat [3][3], char checkFor);
 char checkBlock(char mat [3][3], char checkFor);
 char checkCorner(char mat [3][3],char checkFor);
 char checkCenter(char mat [3][3], char checkFor);
+char checkFieldIsClaimed(char mat[3][3], char field);
 
 char checkTwoInRow_top(char mat[3][3], char checkFor);
 char checkTwoInRow_left(char mat[3][3], char checkFor);

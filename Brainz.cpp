@@ -2,6 +2,9 @@
 
 /* Game starts always with player X.
 
+    |0|1|2|
+    |3|4|5|
+    |6|7|8|
 */
 char brainz(char mat[3][3]){
     char player=0, human=0;
@@ -16,8 +19,12 @@ char brainz(char mat[3][3]){
         human='X';
 
     turns=checkTurns(mat);
-    if(turns==1)
+    if(turns==1){
         return firstTurn(mat, player, human);
+    }
+    else if(turns==2){
+
+    }
 
 
 
@@ -103,14 +110,25 @@ char firstTurn(char mat [3][3], char player, char human){
 
 //secondTurn returns the move of the computer in the second turn
 char secondTurn(char mat [3][3], char player, char human){
-    if (player=='X'&&checkCenter(mat, human)>0){           //if computer is X and human played center in first turn
-        return 6;                                          //claim opposite corner
+    if (player=='X' && checkCenter(mat, human)>0){          //if computer is X and human played center in first turn
+        return 6;                                           //claim opposite corner of own first claim.
     }
-    else{
+    else if (player=='X' && checkCorner(mat, human)>0){
+        if(checkFieldIsClaimed(mat,0)>=0)
+            return 0;                                       //if computer is X and human played a corner(human is gonna,
+        else if(checkFieldIsClaimed(mat,2)>=0)              //lose!) claim an other corner.
+            return 2;
+        else if(checkFieldIsClaimed(mat,6)>=0)
+            return 6;
+        else
+            return 8;
+    }
+    else if (player=='X'){                                  //if computer is X and human played a side field
 
     }
 
     if(player=='O')
+        return -1;
 }
 
 //checkWin returns the ID of the box the computer player needs to claim to win
@@ -148,8 +166,12 @@ char checkCenter(char mat [3][3], char checkFor){
         return -1;
 }
 
-char checkFieldClaimed(char mat[3][3], char field){
 
+char checkFieldIsClaimed(char mat[3][3], char field){
+    if(mat[field/3][field%3]!='-')
+        return -1;
+    else
+        return field;
 }
 
 //checkTwoInRow Returns the adjacent empty field of two equal fields in a row or a column.
