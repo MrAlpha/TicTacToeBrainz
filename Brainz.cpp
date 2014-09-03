@@ -113,18 +113,29 @@ char secondTurn(char mat [3][3], char player, char human){
     if (player=='X' && checkCenter(mat, human)>0){          //if computer is X and human played center in first turn
         return 6;                                           //claim opposite corner of own first claim.
     }
-    else if (player=='X' && checkCorner(mat, human)>0){
-        if(checkFieldIsClaimed(mat,0)>=0)
-            return 0;                                       //if computer is X and human played a corner(human is gonna,
-        else if(checkFieldIsClaimed(mat,2)>=0)              //lose!) claim an other corner.
-            return 2;
-        else if(checkFieldIsClaimed(mat,6)>=0)
-            return 6;
-        else
-            return 8;
-    }
-    else if (player=='X'){                                  //if computer is X and human played a side field
 
+    else if (player=='X' && checkCorner(mat, human)>0){     //if computer is X and human played a corner(human is gonna
+        int n=0, o=0;                                       //lose!) claim an other corner.
+        while(n<9){
+            if(checkFieldIsClaimed(mat,n)>=0)
+            return n;
+
+            n+=2+((o%2)*2); //Produces 0,2,6,8 which are the corner fields.
+            o++;
+        }
+    }
+
+    else if (player=='X'){                                  //if computer is X and human played a side field
+        int n=0, o=0;
+        char toTestAgainst[3][3]=mat
+        while(n<9){
+            if(checkFieldIsClaimed(mat,n)>=0){
+                char posNextBlockMove=checkBlock(mat,'O');
+            }
+
+            n+=2+((o%2)*2); //Produces 0,2,6,8 which are the corner fields.
+            o++;
+        }
     }
 
     if(player=='O')
@@ -166,7 +177,7 @@ char checkCenter(char mat [3][3], char checkFor){
         return -1;
 }
 
-
+//checkFieldIsClaimed returns -1 if Field is already claimed else it returns the field number which was checked for
 char checkFieldIsClaimed(char mat[3][3], char field){
     if(mat[field/3][field%3]!='-')
         return -1;
