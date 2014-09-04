@@ -19,11 +19,11 @@ char brainz(char mat[3][3]){
         human='X';
 
     turns=checkTurns(mat);
-    if(turns==1){
+    if(turns==0){
         return firstTurn(mat, player, human);
     }
-    else if(turns==2){
-
+    else if(turns==1){
+        return secondTurn(mat,player,human);
     }
 
 
@@ -82,7 +82,9 @@ char checkTurns(char mat [3][3]){
             }
         }
     }
-    if(x>=o)
+    if(x==o)
+        return x;
+    else if (x<o)
         return x;
     else
         return o;
@@ -96,7 +98,7 @@ char firstTurn(char mat [3][3], char player, char human){
     }
 
     if(player=='O'){                      //if computer has second move...
-        if(checkCorner(mat,human)>0){     //...claim middle square if human has claimed a corner field
+        if(checkCorner(mat,human)>=0){     //...claim middle square if human has claimed a corner field
             return 4;
         }
         else if(checkCenter(mat,human)>0){ //...claim corner if human has claimed the middle field
@@ -110,7 +112,7 @@ char firstTurn(char mat [3][3], char player, char human){
 
 //secondTurn returns the move of the computer in the second turn
 char secondTurn(char mat [3][3], char player, char human){
-    if (player=='X' && checkCenter(mat, human)>0){          //if computer is X and human played center in first turn
+    if (player=='X' && (checkCenter(mat, human)>0)){          //if computer is X and human played center in first turn
         return 6;                                           //claim opposite corner of own first claim.
     }
 
@@ -125,12 +127,25 @@ char secondTurn(char mat [3][3], char player, char human){
         }
     }
 
-    else if (player=='X'){                                  //if computer is X and human played a side field
-        int n=0, o=0;
-        char toTestAgainst[3][3]=mat
+    else if (player=='X'){                                  //if computer is X and human played a side field in first turn
+        int n=0, o=0;                                       //human is gonna loose!
+        char toTestAgainst[3][3];
+
+        for(int i=0;i<3;i++){                                   //
+            for(int j=0;j<3;j++){
+                toTestAgainst[i][j]=mat[i][j];
+            }
+        }
+
         while(n<9){
-            if(checkFieldIsClaimed(mat,n)>=0){
-                char posNextBlockMove=checkBlock(mat,'O');
+            if(checkFieldIsClaimed(mat,n)>=0){  //if field is not claimed write X and check if...
+                toTestAgainst[n/3][n%3]='X';
+
+                char positionNextBlockMove=checkBlock(mat,'O');     //..blocking move of O..
+
+                toTestAgainst[positionNextBlockMove/3][positionNextBlockMove%3]='O';
+                if(checkWin(toTestAgainst,'O')<0)                                       //..would produce 2 in a row for O.
+                    return n;                                                       //if not claim this field.
             }
 
             n+=2+((o%2)*2); //Produces 0,2,6,8 which are the corner fields.
@@ -138,7 +153,21 @@ char secondTurn(char mat [3][3], char player, char human){
         }
     }
 
-    if(player=='O')
+    else if(player=='O'&&(checkCenter(mat,'X')<0)){         //if humans very first move was not center,
+            char temp=checkWin(mat,'X')                     //take a side square.
+
+            if(temp>0){
+                return temp;
+            }
+            else{
+                for(int i=1;i<8;i+2){
+                    temp=checkFieldIsClaimed(mat,i);
+                    if(temp>=0)
+                        return temp;
+                }
+            }
+
+    }
         return -1;
 }
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Brainz.h"
 
-void testFirstMove();
+void testSecondMove();
 
 using namespace std;
 
@@ -13,16 +13,10 @@ int main()
 //                     {'-','-','-'}};
 //    check=brainz(mat);
 //    cout<<(int)check<<endl;
-// check=checkFieldIsClaimed(mat,1);
-    //check=checkTwoInRow_all(mat, 'O');
-    //cout << "Hello world!" << endl;
-    //cout << (int)check<<endl;
-    int n=0, o=0;
-    while(n<9){
-        cout<<n<<endl;
-        n+=2+((o%2)*2);
-        o++;
+testSecondMove();
 
-    }
+    //cout << (int)check<<endl;
+
+
     return 0;
 }

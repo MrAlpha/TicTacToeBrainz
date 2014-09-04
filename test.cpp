@@ -498,6 +498,69 @@ cout<<"test human opening side edge"<<endl;
 cout<<"BAM all human opening move tests past!"<<endl;
 }
 
+void testSecondMove(){
+    cout<<"Testing human playing center"<<endl;
+
+    char check=0;
+    char mat [3][3]={{'-','-','X'},
+                     {'-','O','-'},
+                     {'-','-','-'}};
+
+    check=brainz(mat);
+
+    if (check==6)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+    cout<<"Testing human playing corner"<<endl;
+
+         check=0;
+         mat       ={{'-','-','X'},
+                     {'-','-','-'},
+                     {'O','-','-'}};
+
+    check=brainz(mat);
+
+    if (check==0||2||6||8)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+
+         check=0;
+         mat       ={{'O','-','X'},
+                     {'-','-','-'},
+                     {'-','-','-'}};
+
+    check=brainz(mat);
+
+    if (check==0||2||6||8)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+         check=0;
+         mat       ={{'-','-','X'},
+                     {'-','-','-'},
+                     {'-','-','O'}};
+
+    check=brainz(mat);
+
+    if (check==0||2||6||8)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+}
+
 //        for(char i=0,i<3,i++){
 //            for(char j=0,j<3,j++){
 //                cout<<mat[i][j];
