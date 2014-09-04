@@ -25,28 +25,29 @@ char brainz(char mat[3][3]){
     else if(turns==1){
         return secondTurn(mat,player,human);
     }
-
-
-
-    nextMove=checkWin(mat, player);
-    if(nextMove>0)
-        return nextMove;
-
-    nextMove=checkBlock(mat, human);
-    if(nextMove>0)
-        return nextMove;
-}
-
-//void stateMachine(){
-//    switch(extern state){
-//    case 1:
-//        break;
-//
-//    case 2:
-//        break;
+    else if (checkWin(mat, player)>0){
+        return checkWin(mat, player);
+    }
+    else if(checkBlock(mat, human)>0){
+        return checkBlock(mat, human);
+    }
+//    else if(checkFork()){
 //
 //    }
-//}
+//    else if(blockFork()){
+//
+//    }
+    else if(checkCenter(mat,EMPTY)>0){
+        return checkCenter(mat,EMPTY);
+    }
+//    else if(oppositeCorner()){
+//
+//    }
+    else if(checkCorner(mat,EMPTY)){
+
+    }
+    else if(empty side)
+}
 
 //checkPlayer returns 'X' if computer player is X and 'O' if computer player is O.
 char checkPlayer(char mat[3][3]){
@@ -119,7 +120,7 @@ char secondTurn(char mat [3][3], char player, char human){
     else if (player=='X' && checkCorner(mat, human)>0){     //if computer is X and human played a corner(human is gonna
         int n=0, o=0;                                       //lose!) claim an other corner.
         while(n<9){
-            if(checkFieldIsClaimed(mat,n)>=0)
+            if(checkFieldIsClaimed(mat,n)<0)
             return n;
 
             n+=2+((o%2)*2); //Produces 0,2,6,8 which are the corner fields.
@@ -138,7 +139,7 @@ char secondTurn(char mat [3][3], char player, char human){
         }
 
         while(n<9){
-            if(checkFieldIsClaimed(mat,n)>=0){  //if field is not claimed write X and check if...
+            if(checkFieldIsClaimed(mat,n)>=0){  //if field is not claimed write X to test copy of game board and check if...
                 toTestAgainst[n/3][n%3]='X';
 
                 char positionNextBlockMove=checkBlock(mat,'O');     //..blocking move of O..
@@ -154,21 +155,15 @@ char secondTurn(char mat [3][3], char player, char human){
     }
 
     else if(player=='O'&&(checkCenter(mat,'X')<0)){         //if humans very first move was not center,
-            char temp=checkWin(mat,'X')                     //take a side square.
+            char temp=checkWin(mat,'X');                     //take a side square.
 
             if(temp>0){
                 return temp;
             }
             else{
-                for(int i=1;i<8;i+2){
-                    temp=checkFieldIsClaimed(mat,i);
-                    if(temp>=0)
-                        return temp;
-                }
+                return checkSideMiddle(mat);
             }
-
     }
-        return -1;
 }
 
 //checkWin returns the ID of the box the computer player needs to claim to win
@@ -183,21 +178,26 @@ char checkBlock(char mat [3][3], char checkFor){
 
 //checkCorner returns the first corner claimed by checkFor
 char checkCorner(char mat [3][3],char checkFor){
-    if(mat[0][0]==checkFor){
-        return 0;
+    int i=0,j=0;
+    while(i<9){
+            if(checkFieldIsClaimed(mat,i)==checkFor){
+                return i;
+            }
+            i+=2+((j%2)*2); //Produces 0,2,6,8 which are the corner fields.
+            j++;
     }
-    if(mat[0][2]==checkFor){
-        return 2;
-    }
-    if(mat[2][0]==checkFor){
-        return 6;
-    }
-    if(mat[0][0]==checkFor){
-        return 8;
-    }
+
     return -1;
 }
 
+//checkSideMiddle returns the ID of the first not claimed side middle field. if all side middle fields are claimed returns -1.
+char checkSideMiddle(char mat [3][3]){
+    for(int i=1;i<8;i+2){
+        if(checkFieldIsClaimed(mat,i)<0)
+            return i;
+    }
+    return -1;
+}
 //checkCenter returns 4 if the center field is claimed by checkFor
 char checkCenter(char mat [3][3], char checkFor){
     if(mat [1][1]==checkFor)
@@ -206,12 +206,14 @@ char checkCenter(char mat [3][3], char checkFor){
         return -1;
 }
 
-//checkFieldIsClaimed returns -1 if Field is already claimed else it returns the field number which was checked for
+//checkFieldIsClaimed returns -1 if Field is not already claimed else it returns the player who claimed it
 char checkFieldIsClaimed(char mat[3][3], char field){
-    if(mat[field/3][field%3]!='-')
+    if(mat[field/3][field%3]==EMPTY)
         return -1;
+    else if(mat[field/3][field%3]=='X')
+        return 'X';
     else
-        return field;
+        return 'O';
 }
 
 //checkTwoInRow Returns the adjacent empty field of two equal fields in a row or a column.
