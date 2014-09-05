@@ -3,8 +3,7 @@
 
 #define EMPTY '-'
 
-//global variable
-//extern char state;
+
 char brainz(char mat[3][3]);
 char checkPlayer(char mat[3][3]);
 char checkTurns(char mat [3][3]);
@@ -13,6 +12,7 @@ char secondTurn(char mat [3][3], char player, char human);
 char checkWin(char mat [3][3], char checkFor);
 char checkBlock(char mat [3][3], char checkFor);
 char checkCorner(char mat [3][3],char checkFor);
+char checkOppCorner(char mat[3][3], char checkFor);
 char checkSideMiddle(char mat [3][3]);
 char checkCenter(char mat [3][3], char checkFor);
 char checkFieldIsClaimed(char mat[3][3], char field);

@@ -9,8 +9,7 @@
 char brainz(char mat[3][3]){
     char player=0, human=0;
     char turns=-1;
-    char nextMove=-1;
-//    extern state=-1; //defined in Brainz.h
+//    char nextMove=-1;
 
     player=checkPlayer(mat);
     if(player=='X')
@@ -38,15 +37,17 @@ char brainz(char mat[3][3]){
 //
 //    }
     else if(checkCenter(mat,EMPTY)>0){
-        return checkCenter(mat,EMPTY);
+        return 4;
     }
-//    else if(oppositeCorner()){
-//
-//    }
-    else if(checkCorner(mat,EMPTY)){
+    else if(checkOppCorner(mat,human)>=0){
+        return checkOppCorner(mat,human);
+    }
+    else if(checkCorner(mat,EMPTY)>0){
+        return checkCorner(mat,EMPTY);
+    }
 
-    }
-    else if(empty side)
+    else if(checkSideMiddle(mat)>0)
+        return checkSideMiddle(mat);
 }
 
 //checkPlayer returns 'X' if computer player is X and 'O' if computer player is O.
@@ -120,7 +121,7 @@ char secondTurn(char mat [3][3], char player, char human){
     else if (player=='X' && checkCorner(mat, human)>0){     //if computer is X and human played a corner(human is gonna
         int n=0, o=0;                                       //lose!) claim an other corner.
         while(n<9){
-            if(checkFieldIsClaimed(mat,n)<0)
+            if(checkFieldIsClaimed(mat,n)==EMPTY)
             return n;
 
             n+=2+((o%2)*2); //Produces 0,2,6,8 which are the corner fields.
@@ -139,7 +140,7 @@ char secondTurn(char mat [3][3], char player, char human){
         }
 
         while(n<9){
-            if(checkFieldIsClaimed(mat,n)>=0){  //if field is not claimed write X to test copy of game board and check if...
+            if(checkFieldIsClaimed(mat,n)==EMPTY){  //if field is not claimed write X to test copy of game board and check if...
                 toTestAgainst[n/3][n%3]='X';
 
                 char positionNextBlockMove=checkBlock(mat,'O');     //..blocking move of O..
@@ -190,10 +191,24 @@ char checkCorner(char mat [3][3],char checkFor){
     return -1;
 }
 
+//checkOppCorner returns the first not yet claimed corner which is opposite of a corner claimed by checkFor
+char checkOppCorner(char mat[3][3], char checkFor){
+    int i=0,j=0;
+    while(i<9){
+            if(checkFieldIsClaimed(mat,i)==checkFor){
+                if(checkFieldIsClaimed(mat,8-i)==EMPTY)     //8-ID of current field gives opposite field
+                    return 8-i;
+            }
+            i+=2+((j%2)*2); //Produces 0,2,6,8 which are the corner fields.
+            j++;
+    }
+
+    return -1;
+}
 //checkSideMiddle returns the ID of the first not claimed side middle field. if all side middle fields are claimed returns -1.
 char checkSideMiddle(char mat [3][3]){
     for(int i=1;i<8;i+2){
-        if(checkFieldIsClaimed(mat,i)<0)
+        if(checkFieldIsClaimed(mat,i)==EMPTY)
             return i;
     }
     return -1;
@@ -206,10 +221,10 @@ char checkCenter(char mat [3][3], char checkFor){
         return -1;
 }
 
-//checkFieldIsClaimed returns -1 if Field is not already claimed else it returns the player who claimed it
+//checkFieldIsClaimed returns EMPTY if Field is not already claimed else it returns the player who claimed it
 char checkFieldIsClaimed(char mat[3][3], char field){
     if(mat[field/3][field%3]==EMPTY)
-        return -1;
+        return EMPTY;
     else if(mat[field/3][field%3]=='X')
         return 'X';
     else
