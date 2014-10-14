@@ -2,7 +2,7 @@
 #include "Brainz.h"
 
 void testSecondMove();
-
+void testFork();
 using namespace std;
 
 int main()
@@ -13,7 +13,7 @@ int main()
 //                     {'-','-','-'}};
 //    check=brainz(mat);
 //    cout<<(int)check<<endl;
-testSecondMove();
+testFork();
 
     //cout << (int)check<<endl;
 

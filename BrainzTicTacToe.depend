@@ -1,14 +1,14 @@
 # depslib dependency file v1.0
-1409789103 source:d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\main.cpp
+1410129540 source:d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\main.cpp
 	<iostream>
 	"Brainz.h"
 
-1409929799 d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\brainz.h
+1413210402 d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\brainz.h
 
-1409789231 source:d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\brainz.cpp
+1413302955 source:d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\brainz.cpp
 	"Brainz.h"
 
-1409789143 source:d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\test.cpp
+1413210386 source:d:\studium\6.ss_14\laborbdv\bdv_labor\brainztictactoe\test.cpp
 	<iostream>
 	"Brainz.h"
 

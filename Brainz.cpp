@@ -52,8 +52,8 @@ char brainz(char mat[3][3]){
 
 //checkPlayer returns 'X' if computer player is X and 'O' if computer player is O.
 char checkPlayer(char mat[3][3]){
-    char i=0, j=0;
-    char x=0,o=0;
+    unsigned char i=0, j=0;                  //as Player X always begins the Program can determine if it plays X or O
+    unsigned char x=0,o=0;
     for(i=0;i<3;i++){
         for(j=0;j<3;j++){
             if(mat[i][j]=='X'){
@@ -72,8 +72,8 @@ char checkPlayer(char mat[3][3]){
 
 //checkTurns returns the number of turns played previous in the game
 char checkTurns(char mat [3][3]){
-    char i=0, j=0;
-    char x=0,o=0;
+    unsigned char i=0, j=0;
+    unsigned char x=0,o=0;
     for(i=0;i<3;i++){
         for(j=0;j<3;j++){
             if(mat[i][j]=='X'){
@@ -177,6 +177,75 @@ char checkBlock(char mat [3][3], char checkFor){
     return checkTwoInRow_all(mat, checkFor);
 }
 
+//checkFork returns the ID of the field player checkFor has to claim to produce a fork
+char checkFork(char mat[3][3], char checkFor){
+
+    char player, human;
+    char own=0, opponent=0;
+    char row[3]={-1, -1, -1}, column[3]={-1, -1, -1};
+    unsigned char index=0;
+    char row_temp, column_temp;
+
+    player=checkFor;
+    if(player=='X')
+        human='O';
+    else
+        human='X';
+
+    for(int i=0;i<3;i++){                   //check if row is candidate for fork, if so write row to row array
+        own=0;
+        opponent=0;
+
+        for(int j=0;j<3;j++){
+            if(mat[i][j]==player){
+                own++;
+            }
+            else if(mat[i][j]==human){
+                opponent++;
+            }
+        }
+        if(own==1&&opponent==0){
+            row[index]=i;
+            index++;
+        }
+    }
+
+    index=0;
+
+     for(int i=0;i<3;i++){                   //check if column is candidate for fork, if so write column to col. array
+        own=0;
+        opponent=0;
+
+        for(int j=0;j<3;j++){
+            if(mat[j][i]==player){
+                own++;
+            }
+            else if(mat[j][i]==human){
+                opponent++;
+            }
+        }
+        if(own==1&&opponent==0){
+            column[index]=i;
+            index++;
+        }
+    }
+
+    for(int i=0;i<3;i++){                   //check all crossings between marked rows and columns
+        if(row[i]>-1){                      //if field where crossing occurs is claimed ->discard, else field is valid
+            row_temp=row[i];
+        }
+        for(int j=0;j<3;j++){
+            if(column[j]>-1){
+                column_temp=column[j];
+            }
+            if(checkFieldIsClaimed(mat,row_temp*3+column_temp)==EMPTY){
+                return row_temp*3+column_temp;
+            }
+        }
+    }
+    return -1;
+}
+
 //checkCorner returns the first corner claimed by checkFor
 char checkCorner(char mat [3][3],char checkFor){
     int i=0,j=0;
@@ -233,7 +302,7 @@ char checkFieldIsClaimed(char mat[3][3], char field){
 
 //checkTwoInRow Returns the adjacent empty field of two equal fields in a row or a column.
 char checkTwoInRow_top(char mat[3][3], char checkFor){
-    char i=0;
+    unsigned char i=0;
     char valReturn=-1;
 
     for(i=0;i<3;i++){
@@ -248,7 +317,7 @@ char checkTwoInRow_top(char mat[3][3], char checkFor){
 }
 
 char checkTwoInRow_left(char mat[3][3], char checkFor){
-    char i=0;
+    unsigned char i=0;
     char valReturn=-1;
 
     for(i=0;i<3;i++){
@@ -262,7 +331,7 @@ char checkTwoInRow_left(char mat[3][3], char checkFor){
 }
 
 char checkTwoInRow_right(char mat[3][3], char checkFor){
-    char i=0;
+    unsigned char i=0;
     char valReturn=-1;
 
     for(i=0;i<3;i++){
@@ -276,7 +345,7 @@ char checkTwoInRow_right(char mat[3][3], char checkFor){
 }
 
 char checkTwoInRow_bottom(char mat[3][3], char checkFor){
-    char i=0;
+    unsigned char i=0;
     char valReturn=-1;
 
     for(i=0;i<3;i++){
@@ -290,7 +359,7 @@ char checkTwoInRow_bottom(char mat[3][3], char checkFor){
 }
 
 char checkTwoInRow_horiGap(char mat[3][3], char checkFor){
-    char i=0;
+    unsigned char i=0;
     char valReturn=-1;
 
     for(i=0;i<3;i++){
@@ -305,7 +374,7 @@ char checkTwoInRow_horiGap(char mat[3][3], char checkFor){
 }
 
 char checkTwoInRow_vertGap(char mat[3][3], char checkFor){
-    char i=0;
+    unsigned char i=0;
     char valReturn=-1;
 
     for(i=0;i<3;i++){

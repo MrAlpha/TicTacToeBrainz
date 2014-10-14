@@ -11,6 +11,7 @@ char firstTurn(char mat [3][3], char player, char human);
 char secondTurn(char mat [3][3], char player, char human);
 char checkWin(char mat [3][3], char checkFor);
 char checkBlock(char mat [3][3], char checkFor);
+char checkFork(char mat[3][3], char checkFor);
 char checkCorner(char mat [3][3],char checkFor);
 char checkOppCorner(char mat[3][3], char checkFor);
 char checkSideMiddle(char mat [3][3]);
