@@ -30,12 +30,12 @@ char brainz(char mat[3][3]){
     else if(checkBlock(mat, human)>0){
         return checkBlock(mat, human);
     }
-//    else if(checkFork()){
-//
-//    }
-//    else if(blockFork()){
-//
-//    }
+    else if(checkFork(mat,player)>=0){
+        return checkFork(mat,player);
+    }
+    else if(blockFork(mat, player, human)>=0){
+        return blockFork(mat, player, human);
+    }
     else if(checkCenter(mat,EMPTY)>0){
         return 4;
     }
@@ -46,13 +46,16 @@ char brainz(char mat[3][3]){
         return checkCorner(mat,EMPTY);
     }
 
-    else if(checkSideMiddle(mat)>0)
+    else if(checkSideMiddle(mat)>0){
         return checkSideMiddle(mat);
+    }
+    else
+        return -1;
 }
 
 //checkPlayer returns 'X' if computer player is X and 'O' if computer player is O.
 char checkPlayer(char mat[3][3]){
-    unsigned char i=0, j=0;                  //as Player X always begins the Program can determine if it plays X or O
+    unsigned char i=0, j=0;                  //as Player X always begins, the Program can determine if it plays X or O
     unsigned char x=0,o=0;
     for(i=0;i<3;i++){
         for(j=0;j<3;j++){
@@ -86,7 +89,7 @@ char checkTurns(char mat [3][3]){
     }
     if(x==o)
         return x;
-    else if (x<o)
+    else if (x<o)   //????????????????????????????? shouldn't be possible
         return x;
     else
         return o;
@@ -165,6 +168,8 @@ char secondTurn(char mat [3][3], char player, char human){
                 return checkSideMiddle(mat);
             }
     }
+    //????????????????????????????????????????????????????????????????? finished yet??? wenn computer O und oben trifft
+    //nicht zu, dann normal weiter. Noch implementieren!!!!
 }
 
 //checkWin returns the ID of the box the computer player needs to claim to win
@@ -183,8 +188,9 @@ char checkFork(char mat[3][3], char checkFor){
     char player, human;
     char own=0, opponent=0;
     char row[3]={-1, -1, -1}, column[3]={-1, -1, -1};
+    char lToR=0, rToL=0;
     unsigned char index=0;
-    char row_temp, column_temp;
+    char row_temp=-1, column_temp=-1;
 
     player=checkFor;
     if(player=='X')
@@ -212,7 +218,7 @@ char checkFork(char mat[3][3], char checkFor){
 
     index=0;
 
-     for(int i=0;i<3;i++){                   //check if column is candidate for fork, if so write column to col. array
+     for(int i=0;i<3;i++){                   //check if column is candidate for a fork, if so write column to col. array
         own=0;
         opponent=0;
 
@@ -238,14 +244,93 @@ char checkFork(char mat[3][3], char checkFor){
             if(column[j]>-1){
                 column_temp=column[j];
             }
-            if(checkFieldIsClaimed(mat,row_temp*3+column_temp)==EMPTY){
+            if(row_temp>=0 && column_temp>=0 && checkFieldIsClaimed(mat,row_temp*3+column_temp)==EMPTY){
                 return row_temp*3+column_temp;
             }
         }
     }
+
+    own=0;
+    opponent=0;
+    for(int i=0;i<9;i+=4){                  //check if left to right diagonal is candidate for a fork,
+        if(checkFieldIsClaimed(mat,i)==player){
+            own++;
+        }
+        else if(checkFieldIsClaimed(mat,i)==human){
+            opponent++;
+        }
+    }
+    if(own==1&&opponent==0){
+        lToR=1;
+    }
+
+    own=0;
+    opponent=0;
+    for(int i=2;i<7;i+=2){                  //check if right to left diagonal is candidate for a fork,
+        if(checkFieldIsClaimed(mat,i)==player){
+            own++;
+        }
+        else if(checkFieldIsClaimed(mat,i)==human){
+            opponent++;
+        }
+    }
+    if(own==1&&opponent==0){
+        rToL=1;
+    }
+
+
+
+    if(lToR==1){                            //check crossings between LEFT to right diagonal and marked rows and columns
+        for(int i=0;i<3;i++){
+            if(row[i]>-1){
+                if(checkFieldIsClaimed(mat,row[i]*4)==EMPTY){
+                    return row[i]*4;
+                }
+            }
+        }
+
+        for(int i=0;i<3;i++){
+            if(column[i]>-1){
+                if(checkFieldIsClaimed(mat,column[i]*4)==EMPTY){
+                    return column[i]*4;
+                }
+            }
+        }
+    }
+
+    if(rToL==1){                            //check crossings between RIGHT to left diagonal and marked rows and columns
+        for(int i=0;i<3;i++){
+            if(row[i]>-1){
+                if(checkFieldIsClaimed(mat,row[i]*2+2)==EMPTY){
+                    return row[i]*2+2;
+                }
+            }
+        }
+
+        for(int i=0;i<3;i++){
+            if(column[i]>-1){
+                if(checkFieldIsClaimed(mat,6-column[i]*2)==EMPTY){
+                    return 6-column[i]*2;
+                }
+            }
+        }
+    }
+
     return -1;
 }
 
+//blockFork checks if opponent has the chance to fork, if so returns the field ID to block fork or to produce own two in a row
+char blockFork(char mat[3][3], char player, char human){
+    if(checkFork(mat,human)>=0){
+        if(checkTwoInRow_all(mat, player)>=0){
+            return checkTwoInRow_all(mat, player);
+        }
+        else{
+            return checkFork(mat, human);
+        }
+    }
+    return -1;
+}
 //checkCorner returns the first corner claimed by checkFor
 char checkCorner(char mat [3][3],char checkFor){
     int i=0,j=0;
@@ -276,7 +361,7 @@ char checkOppCorner(char mat[3][3], char checkFor){
 }
 //checkSideMiddle returns the ID of the first not claimed side middle field. if all side middle fields are claimed returns -1.
 char checkSideMiddle(char mat [3][3]){
-    for(int i=1;i<8;i+2){
+    for(int i=1;i<8;i+=2){
         if(checkFieldIsClaimed(mat,i)==EMPTY)
             return i;
     }

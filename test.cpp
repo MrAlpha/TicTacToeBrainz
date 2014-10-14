@@ -691,7 +691,51 @@ void testFork(){
     }
 
 /***********************************************************/
+    check=0;
+    mat            ={{'X','-','-'},
+                     {'X','-','-'},
+                     {'O','O','-'}};
 
+    check=checkFork(mat,'X');
+
+    if (check==4)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+/***********************************************************/
+    check=0;
+    mat            ={{'X','-','-'},
+                     {'-','O','-'},
+                     {'-','O','X'}};
+
+    check=checkFork(mat,'X');
+
+    if (check==2)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+/***********************************************************/
+    check=0;
+    mat            ={{'X','-','-'},
+                     {'-','-','X'},
+                     {'-','O','O'}};
+
+    check=checkFork(mat,'X');
+
+    if (check==3)
+        cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+/***********************************************************/
     check=0;
     mat            ={{'X','O','-'},
                      {'O','-','-'},
@@ -699,7 +743,7 @@ void testFork(){
 
     check=checkFork(mat,'X');
 
-    if (check==6)
+    if (check==8)
         cout<<"OK!"<<endl;
     else{
         cout<<"FAIL"<<endl;
