@@ -49,8 +49,15 @@ char brainz(char mat[3][3]){
     else if(checkSideMiddle(mat)>0){
         return checkSideMiddle(mat);
     }
-    else
-        return -1;
+    else{
+        for(int i=0;i<9;i++){
+            if(checkFieldIsClaimed(mat,i)!=EMPTY){
+                return i;
+            }
+        }
+    }
+//    else
+//        return -1;
 }
 
 //checkPlayer returns 'X' if computer player is X and 'O' if computer player is O.
