@@ -21,13 +21,14 @@ char brainz(char mat[3][3]){
     if(turns==0){
         return firstTurn(mat, player, human);
     }
-    else if(turns==1){
-        return secondTurn(mat,player,human);
-    }
-    else if (checkWin(mat, player)>0){
+//    else if(turns==1){
+//        return secondTurn(mat,player,human);
+//    }
+    else
+        if (checkWin(mat, player)>0){
         return checkWin(mat, player);
     }
-    else if(checkBlock(mat, human)>0){
+    else if(checkBlock(mat, human)>=0){
         return checkBlock(mat, human);
     }
     else if(checkFork(mat,player)>=0){
@@ -166,10 +167,12 @@ char secondTurn(char mat [3][3], char player, char human){
     }
 
     else if(player=='O'&&(checkCenter(mat,'X')<0)){         //if humans very first move was not center,
-            char temp=checkWin(mat,'X');                     //take a side square.
-
-            if(temp>0){
-                return temp;
+                                                            //take a side square.
+            if(checkWin(mat,'X')>0){
+                return checkWin(mat,'X');
+            }
+            else if(checkFork(mat,'X')>=0){
+                return checkFork(mat,'X');
             }
             else{
                 return checkSideMiddle(mat);
@@ -329,15 +332,29 @@ char checkFork(char mat[3][3], char checkFor){
 //blockFork checks if opponent has the chance to fork, if so returns the field ID to block fork or to produce own two in a row
 char blockFork(char mat[3][3], char player, char human){
     if(checkFork(mat,human)>=0){
-        if(checkTwoInRow_all(mat, player)>=0){
-            return checkTwoInRow_all(mat, player);
+
+        for(int i=0; i<3; i++){
+
+            if(checkTwoInRowPossible(mat, player, human, i, -1)>=0){    //check if there is a chance to produce two in a row
+                for(int j=0; j<3; j++){
+                    if(mat[i][j]==EMPTY){
+                        return i*3+j;
+                    }
+                }
+            }
+            else if(checkTwoInRowPossible(mat, player, human, -1, i)>=0){
+                for(int j=0; j<3; j++){
+                    if(mat[j][i]==EMPTY){
+                        return j*3+i;
+                    }
+                }
+            }
         }
-        else{
-            return checkFork(mat, human);
-        }
+        return checkFork(mat, human);
     }
     return -1;
 }
+
 //checkCorner returns the first corner claimed by checkFor
 char checkCorner(char mat [3][3],char checkFor){
     int i=0,j=0;
@@ -390,6 +407,40 @@ char checkFieldIsClaimed(char mat[3][3], char field){
         return 'X';
     else
         return 'O';
+}
+
+//checkTwoInRowPossible returns a positive char if specified row or column are a candidate for a two in a row
+char checkTwoInRowPossible(char mat [3][3], char player, char human, char row, char column){
+    int own_a=0, opponent_a=0;
+    if(row>=0){
+        for(int i=0;i<3;i++){
+            if(mat[row][i]==player){
+                own_a++;
+            }
+            else if(mat[row][i]==human){
+                opponent_a++;
+            }
+        }
+        if((own_a==1)&&(opponent_a==0)){
+            return row;
+        }
+
+    }
+    else if(column>=0){
+        for(int i=0;i<3;i++){
+            if(mat[i][column]==player){
+                own_a++;
+            }
+            else if(mat[i][column]==human){
+                opponent_a++;
+            }
+        }
+        if(own_a==1&&opponent_a==0){
+            return column;
+        }
+    }
+    else
+        return -1;
 }
 
 //checkTwoInRow Returns the adjacent empty field of two equal fields in a row or a column.

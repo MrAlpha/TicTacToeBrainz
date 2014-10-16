@@ -18,6 +18,7 @@ char checkOppCorner(char mat[3][3], char checkFor);
 char checkSideMiddle(char mat [3][3]);
 char checkCenter(char mat [3][3], char checkFor);
 char checkFieldIsClaimed(char mat[3][3], char field);
+char checkTwoInRowPossible(char mat [3][3], char player, char human, char row, char column);
 
 char checkTwoInRow_top(char mat[3][3], char checkFor);
 char checkTwoInRow_left(char mat[3][3], char checkFor);

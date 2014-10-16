@@ -129,7 +129,7 @@ void testTwoInRow(){
     /********************************************************************************/
         check=0;
     mat =           {{'-','-','-'},
-                     {'O','-','-'},
+                     {'O','X','-'},
                      {'O','-','-'}};
 
     check=checkTwoInRow_all(mat, 'O');
@@ -730,6 +730,21 @@ void testFork(){
 
     if (check==3)
         cout<<"OK!"<<endl;
+    else{
+        cout<<"FAIL"<<endl;
+        return;
+    }
+
+/***********************************************************/
+    check=0;
+    mat            ={{'-','O','X'},
+                     {'-','O','-'},
+                     {'-','X','-'}};
+
+    check=checkFork(mat,'X');
+    cout<<"this"<<endl;
+    if (check==8)
+        cout<<"sehr OK!"<<endl;
     else{
         cout<<"FAIL"<<endl;
         return;
