@@ -25,7 +25,7 @@ char brainz(char mat[3][3]){
 //        return secondTurn(mat,player,human);
 //    }
     else
-        if (checkWin(mat, player)>0){
+        if (checkWin(mat, player)>=0){
         return checkWin(mat, player);
     }
     else if(checkBlock(mat, human)>=0){
@@ -171,9 +171,9 @@ char secondTurn(char mat [3][3], char player, char human){
             if(checkWin(mat,'X')>0){
                 return checkWin(mat,'X');
             }
-            else if(checkFork(mat,'X')>=0){
-                return checkFork(mat,'X');
-            }
+//            else if(checkFork(mat,'X')>=0){
+//                return checkFork(mat,'X');
+//            }
             else{
                 return checkSideMiddle(mat);
             }
@@ -424,6 +424,7 @@ char checkTwoInRowPossible(char mat [3][3], char player, char human, char row, c
         if((own_a==1)&&(opponent_a==0)){
             return row;
         }
+        return -1;
 
     }
     else if(column>=0){
@@ -438,6 +439,7 @@ char checkTwoInRowPossible(char mat [3][3], char player, char human, char row, c
         if(own_a==1&&opponent_a==0){
             return column;
         }
+        return-1;
     }
     else
         return -1;
